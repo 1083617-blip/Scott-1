@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Scott 1 National Team</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<style>
+/* Basic imports and original styles preserved */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+:root{--bg1:#1f1608;--bg2:#352a13;--glass:rgba(255,255,255,.08);--border:rgba(255,255,255,.15);--text:#f8fafc;--accent:234,179,8;}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,sans-serif;color:var(--text);background:radial-gradient(circle at top left,rgba(var(--accent),.2),transparent 35%),radial-gradient(circle at bottom right,#f9731633,transparent 35%),linear-gradient(135deg,var(--bg1),var(--bg2));min-height:100vh;transition:background .6s;}
+.main-content{width:100%;padding:25px;max-width:1300px;margin:0 auto;}
+.title-wrap{position:relative;display:inline-block;margin:0 auto;}
+h1{font-size:3.5rem;text-align:center;margin-bottom:15px;}
+h1.rainbow{background:linear-gradient(90deg,#f43f5e,#facc15,#22c55e,#3b82f6,#a855f7,#f43f5e);background-size:400% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:rainbowSlide 4s linear infinite;}
+@keyframes rainbowSlide{to{background-position:400% 0}}
+h1.spin{display:inline-block;animation:titleSpin 8s linear infinite;}@keyframes titleSpin{to{transform:rotate(360deg)}}
+.toolbar{display:flex;gap:12px;justify-content:center;margin:10px 0 15px 0;flex-wrap:wrap;}
+.toolbar button{padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;cursor:pointer;font-weight:600;transition:0.2s;backdrop-filter:blur(10px);} .toolbar button:hover{background:rgba(255,255,255,0.18);transform:translateY(-2px);}
+#mainSearch{width:100%;max-width:420px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--glass);color:white;margin:10px auto;display:block;}
+.letter-section{max-width:1200px;margin:30px auto;padding:30px;border-radius:34px;background:var(--glass);backdrop-filter:blur(24px);border:1px solid var(--border);}
+.letter-header{font-size:38px;font-weight:800;margin-bottom:20px;}
+.buttons-container{display:flex;flex-direction:column;gap:18px;}
+#lolbutton{padding:15px 24px;border:none;border-radius:22px;background:var(--glass);color:white;cursor:pointer;}
+.game{position:relative;}
+.game button{ width:100%;padding:20px;border-radius:18px;border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08);color:white;text-align:left;cursor:pointer; font-size:17px;font-weight:700;font-family:Inter,sans-serif; transition:all 0.25s ease;overflow:hidden;position:relative;}
+.game button::before{ content:"";position:absolute;top:0;left:-100%;width:100%;height:100%; background:linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent); transition:0.5s;}
+.game button:hover::before{left:100%;}
+.game button:hover{ transform:translateY(-3px) scale(1.02); background:rgba(255,255,255,0.18); box-shadow:0 10px 25px rgba(0,0,0,0.4),0 0 15px rgba(255,215,0,0.25);}
+.star{position:absolute;right:15px;top:50%;transform:translateY(-50%);font-size:28px;cursor:pointer;z-index:2;}
+.game:hover .star{transform:translateY(-50%) scale(1.2);color:gold;}
+#favPanel,#shopPanel,#recentPanel,#adminPanel{ position:fixed;right:0;top:0;width:300px;height:100%;background:#151005;border-left:1px solid rgba(255,215,0,0.25);color:#fff;padding:18px;transform:translateX(100%);transition:.3s;overflow:auto;z-index:200;}
+#favPanel.open,#shopPanel.open,#recentPanel.open,#adminPanel.open{transform:translateX(0)}
+#adminPanel{border-left:1px solid rgba(239,68,68,0.5);background:#170808;width:320px;}
+.admin-btn{ width:100%;padding:10px;margin:6px 0;border-radius:10px;border:1px solid rgba(239,68,68,0.4); background:rgba(239,68,68,0.12);color:#fff;cursor:pointer;font-weight:700;text-align:left;font-family:Inter,sans-serif;}
+.admin-btn:hover{background:rgba(239,68,68,0.3);} .admin-btn.on{background:rgba(34,197,94,0.25);border-color:rgba(34,197,94,0.6);}
+.panel-close{float:right;background:none;border:none;color:#fff;font-size:20px;cursor:pointer;}
+.shop-item{ border:1px solid rgba(255,215,0,0.3);border-radius:14px;padding:12px;margin:10px 0; background:rgba(255,215,0,0.06);}
+.shop-item h3{margin:0 0 4px 0;font-size:15px;} .shop-item p{margin:0 0 8px 0;font-size:12px;opacity:0.75;} .shop-item button{ width:100%;padding:8px;border-radius:10px;border:none;cursor:pointer;font-weight:700; background:linear-gradient(135deg,#facc15,#f59e0b);color:#1f1608;}
+.shop-item button:disabled{background:#444;color:#999;cursor:not-allowed;} .shop-item .owned{background:#22c55e;color:#052e12;}
+#coinCounter{ position:fixed;top:12px;right:14px;z-index:300; background:rgba(0,0,0,0.55);border:1px solid rgba(255,215,0,0.4); padding:8px 16px;border-radius:999px;font-weight:800;font-size:16px; backdrop-filter:blur(10px);cursor:pointer;user-select:none;}
+.badge{position:fixed;pointer-events:auto;cursor:pointer;animation:spin linear infinite;opacity:0.8;z-index:5;user-select:none;}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.coin-pop{ position:fixed;pointer-events:none;font-weight:800;color:#facc15;z-index:400; animation:rise 0.9s ease-out forwards;text-shadow:0 2px 6px rgba(0,0,0,0.6);} @keyframes rise{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-50px)}}
+#splash{ position:absolute;right:-40px;top:52px;color:#ffff00;font-weight:800;font-size:22px; transform:rotate(-18deg);transform-origin:center;text-shadow:2px 2px 0 #3f3f00; animation:splashPulse 0.45s ease-in-out infinite alternate;pointer-events:none;z-index:20;white-space:nowrap;} @keyframes splashPulse{from{transform:rotate(-18deg) scale(1);}to{transform:rotate(-18deg) scale(1.1)}}
+.toast{ position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px); background:rgba(20,15,3,0.95);border:1px solid #facc15;color:#fff; padding:12px 22px;border-radius:14px;z-index:500;font-weight:600; transition:transform 0.35s;box-shadow:0 8px 30px rgba(0,0,0,0.5);} .toast.show{transform:translateX(-50%) translateY(0);}
+body.party{animation:partyHue 1.2s linear infinite;}@keyframes partyHue{from{filter:hue-rotate(0)}to{filter:hue-rotate(360deg)}}
+body.grad-sunset{background:linear-gradient(270deg,#f97316,#db2777,#7c3aed,#f97316)!important;background-size:600% 600%!important;animation:gradShift 14s ease infinite;} body.grad-ocean{background:linear-gradient(270deg,#0ea5e9,#0f766e,#1e3a8a,#0ea5e9)!important;background-size:600% 600%!important;animation:gradShift 14s ease infinite;} body.grad-galaxy{background:linear-gradient(270deg,#1e1b4b,#701a75,#0f172a,#1e1b4b)!important;background-size:600% 600%!important;animation:gradShift 14s ease infinite;} body.grad-gold{background:linear-gradient(270deg,#b45309,#facc15,#ea580c,#b45309)!important;background-size:600% 600%!important;animation:gradShift 14s ease infinite;} @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.matrix-drop{position:fixed;top:-60px;pointer-events:none;z-index:4;animation:matrixFall linear infinite;opacity:0.5;}@keyframes matrixFall{to{transform:translateY(110vh);}}
+.snowflake{position:fixed;top:-30px;color:#fff;pointer-events:none;z-index:6;animation:snowFall linear infinite;}@keyframes snowFall{to{transform:translateY(110vh) rotate(360deg)}}
+.spark{position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;z-index:450;animation:sparkFly .7s ease-out forwards;}@keyframes sparkFly{to{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
+#petBadge{position:fixed;font-size:30px;pointer-events:none;z-index:350;transition:left .25s ease-out,top .25s ease-out;}
+body.team-cursor{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32'><text y='24' font-size='24'>🛡️</text></svg>") 8 8,auto;}
+
+/* LOGIN / SIGNUP MODAL (cool visual) */
+#authOverlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.6),rgba(0,0,0,0.75));display:flex;align-items:center;justify-content:center;z-index:600;}
+#authBox{width:420px;background:linear-gradient(180deg,#0f172a,#111827);border-radius:16px;padding:22px;border:1px solid rgba(255,255,255,0.06);box-shadow:0 10px 40px rgba(0,0,0,0.6);color:#fff;}
+#authBox h2{margin:0 0 8px 0;font-size:20px;}
+.auth-switch{display:flex;gap:8px;margin-bottom:12px;}
+.auth-switch button{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#fff;cursor:pointer;}
+.auth-row{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
+.auth-row input{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);color:#fff;}
+.small-muted{font-size:12px;opacity:0.7;margin-top:8px;}
+#authFooter{display:flex;gap:8px;justify-content:space-between;align-items:center;}
+#authFooter button{padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(135deg,#facc15,#f59e0b);font-weight:700;color:#111;}
+#logoutBtn{padding:8px 12px;border-radius:10px;border:none;background:rgba(255,255,255,0.06);color:#fff;}
+</style>
+</head>
+<body>
+<div id="coinCounter" title="Open the Scott 1 Shop">🪙 0</div>
+
+<div class="main-content">
+  <div style="text-align:center">
+    <div class="toolbar">
+      <button id="gameListBtn">📄 Game List</button>
+    </div>
+
+    <input id="mainSearch" placeholder="Search games...">
+
+    <div class="toolbar">
+      <button onclick="lucky()">🎲 I'm Feeling Lucky</button>
+      <button onclick="openFav()">⭐ Favorites</button>
+      <button onclick="openRecent()">🕘 Recent</button>
+      <button onclick="openShop()">🛒 Shop</button>
+      <button id="adminOpenBtn">🛡️ Admin</button>
+      <button id="vipAreaBtn">👑 VIP Area</button>
+    </div>
+  </div>
+
+  <div id="favPanel"></div>
+  <div id="shopPanel"></div>
+  <div id="recentPanel"></div>
+  <div id="adminPanel"></div>
+
+  <div style="text-align:center"><div class="title-wrap">
+    <h1>Scott 1 National Team</h1>
+    <div id="splash"></div>
+  </div></div>
+
+  <h2 style="color: white; text-align: center; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-weight: normal; font-size: 18px;">
+    Files from <a href="https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/" target="_blank" style="display:inline;color:#f0c948;text-decoration:none;font-size:18px;">a document by @Scott1NationalTeam</a>
+  </h2>
+
+  <h2 style="text-align:center">
+    <button id="lolbutton" onclick="const script = document.createElement('script');script.src = 'https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@latest/game.js';document.body.appendChild(script);">Click to load if it isn't loading</button>
+  </h2>
+
+  <div id="sections-container"></div>
+</div>
+
+<!-- Login / Signup Overlay (mandatory on load) -->
+<div id="authOverlay">
+  <div id="authBox" role="dialog" aria-modal="true">
+    <h2 id="authTitle">Welcome — Sign In / Sign Up</h2>
+    <div class="auth-switch">
+      <button id="toggleSignIn" class="active">Sign In</button>
+      <button id="toggleSignUp">Sign Up</button>
+    </div>
+    <div class="auth-row">
+      <input id="authUser" placeholder="Username" autocomplete="username">
+      <input id="authPass" placeholder="Password" type="password" autocomplete="current-password">
+    </div>
+    <div id="authFooter">
+      <div>
+        <button id="authSubmit">Sign In</button>
+        <button id="continueGuest" style="margin-left:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;padding:8px;border-radius:8px;">Continue as Guest</button>
+      </div>
+      <div id="authHelp" class="small-muted">No emails required. Accounts saved locally.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin note: keep UncJohn admin code here (client-side) per user instruction -->
+<script>
+/*
+  Features added:
+  - Per-user accounts stored in localStorage.
+  - Must sign up / sign in (or continue as Guest) before using site.
+  - Items can be equipped and unequipped; Unequip Everything reverts visuals but
+    preserves ownership.
+  - VIP area requires admin code UncJohn to grant VIP/admin access to current user.
+  - EscapeRoad-style games are automatically marked VIP-only if their name includes "escape".
+*/
+
+/* ---------- storage keys and user system ---------- */
+const USERS_KEY = 'scott1Users_v1';
+const CURRENT_USER_KEY = 'scott1CurrentUser_v1';
+let users = {}; // username => {passwordHash, coins, owned:[], plays, badgeClicks, activeEffects:[], isAdmin, isVIP, settings:{}}
+let currentUser = null; // username string or null (guest)
+
+function loadUsers(){
+  try{
+    const raw = localStorage.getItem(USERS_KEY);
+    users = raw ? JSON.parse(raw) : {};
+  }catch(e){ users = {}; }
+}
+function saveUsers(){
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+function setCurrentUser(username){
+  currentUser = username;
+  localStorage.setItem(CURRENT_USER_KEY, username||'');
+  applyUserStateToUI();
+}
+function getUserObj(u){
+  return users[u] || null;
+}
+
+/* very small sha256 helper using SubtleCrypto for password hashing (async) */
+async function sha256Hex(str){
+  const enc = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+/* register/login */
+async function registerUser(username, password){
+  username = username.trim();
+  if(!username || !password) throw 'Missing username or password';
+  if(users[username]) throw 'Username already exists';
+  const hash = await sha256Hex(password);
+  users[username] = { passwordHash: hash, coins: 0, owned: [], plays: 0, badgeClicks: 0, activeEffects: [], isAdmin: false, isVIP:false, settings:{} };
+  saveUsers();
+}
+async function loginUser(username, password){
+  username = username.trim();
+  if(!users[username]) throw 'No such user';
+  const hash = await sha256Hex(password);
+  if(users[username].passwordHash !== hash) throw 'Wrong password';
+  setCurrentUser(username);
+}
+function logoutUser(){
+  setCurrentUser(null);
+  toast('Logged out. Refresh to log in again or create a new account.');
+}
+
+/* init user system and UI */
+loadUsers();
+const savedCur = localStorage.getItem(CURRENT_USER_KEY) || '';
+if(savedCur && users[savedCur]) setCurrentUser(savedCur);
+else setCurrentUser(null);
+
+/* ---------- UI helpers and toast ---------- */
+function toast(msg){
+  let t=document.getElementById('toast'); if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t);}
+  t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ---------- per-user coin/own/equip helpers ---------- */
+function ensureUser(){
+  if(!currentUser){
+    toast('Please sign in first.');
+    return false;
+  }
+  if(!users[currentUser]){ setCurrentUser(null); toast('User not found. Please sign in.'); return false; }
+  return true;
+}
+function userData(){ return users[currentUser]; }
+
+function userAddCoins(n,x,y){
+  if(!ensureUser()) return;
+  const u = userData();
+  // item doubleCoins and luckyCharm apply
+  let amt = n;
+  if(u.owned.includes('doubleCoins')) amt *= 2;
+  if(u.owned.includes('luckyCharm') && Math.random()<0.1){ amt *= 5; toast('🍀 LUCKY! x5 coins!'); }
+  u.coins += amt; saveUsers(); updateCoins();
+  const pop = document.createElement('div'); pop.className='coin-pop'; pop.textContent='+'+amt+' 🪙'; pop.style.left=(x||window.innerWidth/2)+'px'; pop.style.top=(y||100)+'px'; document.body.appendChild(pop);
+  setTimeout(()=>pop.remove(),900);
+}
+function updateCoins(){ const c=document.getElementById('coinCounter'); if(!c) return; const u = currentUser ? users[currentUser] : null; c.textContent = (u ? (u.isAdmin? '🛡️ ':'') + '🪙 ' + u.coins : '🪙 —'); }
+function userEarn(base,x,y){ if(!ensureUser()) return; userAddCoins(base,x,y); blip(); }
+
+/* ---------- Equip / Unequip logic ---------- */
+function applyEffectById(id){
+  // apply visual for a given item id (not saving ownership)
+  const it = SHOP_ITEMS.find(s=>s.id===id);
+  if(!it) return;
+  // call its apply logic (many apply functions are defined to be idempotent)
+  try{ it.apply(); }catch(e){ console.error('apply error',e); }
+  // track in user's activeEffects
+  if(!users[currentUser].activeEffects.includes(id)) users[currentUser].activeEffects.push(id);
+  saveUsers();
+  updateCoins();
+}
+function removeEffectById(id){
+  // reverse effect for an item id (only reverts visuals, not removing ownership)
+  switch(id){
+    case 'goldTitle':
+    case 'rainbowTitle':
+    case 'spinTitle': {
+      const h=document.querySelector('h1'); if(h){ h.classList.remove('rainbow','spin'); h.style.background=''; h.style.color=''; }
+      break;
+    }
+    case 'bluetheme': {
+      document.documentElement.style.setProperty('--bg1','#1f1608'); document.documentElement.style.setProperty('--bg2','#352a13'); document.documentElement.style.setProperty('--accent','234,179,8');
+      break;
+    }
+    case 'badgeRain': { document.querySelectorAll('.badge').forEach((b,i)=>{ if(i>24) b.remove(); }); break; }
+    case 'partyMode': { document.body.classList.remove('party'); break; }
+    case 'bigSplash': { const s=document.getElementById('splash'); if(s) s.style.fontSize=''; break; }
+    case 'vipBadge': { /* coin counter shows crown only if owned; unequip doesn't remove ownership */ updateCoins(); break; }
+    case 'teamCursor': { document.body.classList.remove('team-cursor'); break; }
+    case 'clickSparks': { disableClickSparks(); break; }
+    case 'petBadge': { disablePetBadge(); break; }
+    case 'snowMode': { document.querySelectorAll('.snowflake').forEach(e=>e.remove()); snowOn=false; break; }
+    case 'matrixRain': { document.querySelectorAll('.matrix-drop').forEach(e=>e.remove()); matrixRainOn=false; break; }
+    case 'rgbBorders': { const r=document.getElementById('rgbStyle'); if(r) r.remove(); break; }
+    case 'customSplash': { if(users[currentUser].customSplash){ delete users[currentUser].customSplash; delete splashExtra[users[currentUser].customSplash]; } break; }
+    case 'soundFx': { soundOn=false; break; }
+    default: { /* backgrounds handled separately */ break; }
+  }
+  const idx = users[currentUser].activeEffects.indexOf(id); if(idx>=0) users[currentUser].activeEffects.splice(idx,1);
+  saveUsers(); updateCoins();
+}
+function unequipAllForUser(){
+  if(!ensureUser()) return;
+  const u = users[currentUser];
+  (u.activeEffects || []).slice().forEach(id => removeEffectById(id));
+  // also ensure gradients/classes removed
+  GRAD_CLASSES.forEach(c=>document.body.classList.remove(c)); delete u.activeGradient;
+  document.body.classList.remove('party','team-cursor');
+  const rgb=document.getElementById('rgbStyle'); if(rgb) rgb.remove();
+  disablePetBadge(); disableClickSparks();
+  persist(); saveUsers(); updateCoins();
+  toast('Unequipped all active effects.');
+}
+
+/* ---------- modified renderShop: equip/unequip controls ---------- */
+function renderShop(){
+  const p=document.getElementById('shopPanel');
+  if(!p) return;
+  const u = currentUser ? users[currentUser] : null;
+  const free = adminFlag('freeShop')||adminFlag('infGold') || (u && u.isAdmin);
+  p.innerHTML = '<button class="panel-close" onclick="closePanels()">✕</button><h2>🛡️ Scott 1 Shop</h2>' +
+    '<p style="font-size:12px;opacity:0.7">Earn coins: +5 per game played, +1 per floating badge clicked.' + (free?'<br><b style="color:#f87171">🛡️ ADMIN/VIP: everything is FREE</b>':'') + '</p>';
+
+  // Unequip button
+  const uneq = document.createElement('button');
+  uneq.textContent = 'Unequip Everything';
+  uneq.style.cssText = 'width:100%;padding:10px;margin:8px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#fff;font-weight:700;cursor:pointer;';
+  uneq.onclick = ()=>{ if(confirm('Unequip all active effects? (keeps owned items)')){ unequipAllForUser(); renderShop(); } };
+  p.appendChild(uneq);
+
+  SHOP_ITEMS.forEach(item=>{
+    const owned = u && u.owned.includes(item.id);
+    const active = u && u.activeEffects && u.activeEffects.includes(item.id);
+    const d=document.createElement('div'); d.className='shop-item';
+    d.innerHTML = '<h3>'+item.name+'</h3><p>'+item.desc+'</p>';
+    const b=document.createElement('button');
+    if(owned){
+      if(item.group==='bg'){
+        const cls = GRAD_MAP[item.id];
+        if(u.activeGradient===cls){
+          b.textContent='✓ ACTIVE — click to turn off'; b.className='owned';
+          b.onclick = ()=>{ clearGradientForUser(); renderShop(); };
+        } else {
+          b.textContent='Equip background'; b.onclick = ()=>{ setGradientForUser(cls); renderShop(); };
+        }
+      } else {
+        // non-bg : show Equip / Unequip toggle
+        b.textContent = active ? 'Unequip' : 'Equip';
+        b.onclick = ()=>{ if(active) { removeEffectById(item.id); } else { applyEffectById(item.id); } renderShop(); };
+      }
+    } else {
+      b.textContent = free ? 'Take it — FREE 🛡️' : ('Buy — '+item.price+' 🪙');
+      b.onclick = ()=>{ buyItemForUser(item.id); };
+    }
+    d.appendChild(b);
+    p.appendChild(d);
+  });
+}
+
+/* ---------- user shop helpers ---------- */
+function buyItemForUser(id){
+  if(!ensureUser()) return;
+  const u = users[currentUser];
+  const item = SHOP_ITEMS.find(s=>s.id===id);
+  if(!item) return;
+  if(u.owned.includes(id)) { toast('Already owned'); return; }
+  const free = adminFlag('freeShop')||adminFlag('infGold') || (u && u.isAdmin);
+  if(!free && u.coins < item.price){ toast('Not enough coins'); return; }
+  if(!free) u.coins -= item.price;
+  u.owned.push(id);
+  saveUsers(); updateCoins(); toast('Purchased '+item.name);
+  // auto-equip some items on buy (optional)
+  if(item.id === 'goldTitle' || item.id === 'rainbowTitle' || item.id === 'spinTitle' || item.group === 'bg'){
+    applyEffectById(id);
+    if(item.group==='bg') setGradientForUser(GRAD_MAP[item.id]);
+  } else {
+    // non-bg: do not auto-equip by default, leave as owned
+  }
+  renderShop();
+}
+
+/* background handling per user */
+function setGradientForUser(cls){
+  if(!ensureUser()) return;
+  GRAD_CLASSES.forEach(c=>document.body.classList.remove(c));
+  document.body.classList.add(cls);
+  users[currentUser].activeGradient = cls; saveUsers();
+}
+function clearGradientForUser(){
+  GRAD_CLASSES.forEach(c=>document.body.classList.remove(c));
+  delete users[currentUser].activeGradient; saveUsers();
+}
+
+/* admin flags (keep prior adminFlag usage but now tied to current user) */
+function adminFlag(k){
+  return currentUser && users[currentUser] && users[currentUser].isAdmin && !!users[currentUser].admin && !!users[currentUser].admin[k];
+}
+function toggleAdminFlag(k){
+  if(!ensureUser()) return;
+  if(!users[currentUser].admin) users[currentUser].admin = {};
+  users[currentUser].admin[k] = !users[currentUser].admin[k];
+  saveUsers(); updateCoins(); renderAdmin(); if(document.getElementById('shopPanel').classList.contains('open')) renderShop();
+}
+
+/* ---------- load/apply original effects with equip support ---------- */
+/* Many original helper functions are kept; adapted to per-user where needed */
+
+let matrixRainOn=false;
+function startMatrixRain(){
+  if(matrixRainOn) return; matrixRainOn=true;
+  for(let i=0;i<18;i++){
+    const d=document.createElement('div'); d.className='matrix-drop'; d.textContent='🛡️';
+    d.style.left=Math.random()*100+'vw'; d.style.fontSize=(14+Math.random()*26)+'px';
+    d.style.animationDuration=(4+Math.random()*8)+'s'; d.style.animationDelay=(Math.random()*8)+'s';
+    document.body.appendChild(d);
+  }
+}
+
+let snowOn=false;
+function startSnow(){
+  if(snowOn) return; snowOn=true;
+  for(let i=0;i<30;i++){
+    const d=document.createElement('div'); d.className='snowflake'; d.textContent='❄';
+    d.style.left=Math.random()*100+'vw'; d.style.fontSize=(8+Math.random()*14)+'px';
+    d.style.animationDuration=(6+Math.random()*10)+'s'; d.style.animationDelay=(Math.random()*10)+'s';
+    d.style.opacity=0.3+Math.random()*0.5; document.body.appendChild(d);
+  }
+}
+
+let sparksOn=false; let sparkHandler=null;
+function enableClickSparks(){ if(sparksOn) return; sparksOn=true; sparkHandler = function(e){ for(let i=0;i<8;i++){ const s=document.createElement('div'); s.className='spark'; s.style.left=e.clientX+'px'; s.style.top=e.clientY+'px'; s.style.background=['#facc15','#f59e0b','#fde68a','#fb923c'][i%4]; s.style.setProperty('--dx',(Math.random()*120-60)+'px'); s.style.setProperty('--dy',(Math.random()*120-60)+'px'); document.body.appendChild(s); setTimeout(()=>s.remove(),700); } }; document.addEventListener('click', sparkHandler); }
+function disableClickSparks(){ if(sparkHandler) document.removeEventListener('click', sparkHandler); sparkHandler=null; sparksOn=false; }
+
+let petOn=false; let petMoveHandler=null;
+function enablePetBadge(){ if(petOn) return; petOn=true; const p=document.createElement('div'); p.id='petBadge'; p.textContent='🛡️'; document.body.appendChild(p); petMoveHandler = function(e){ p.style.left=(e.clientX+24)+'px'; p.style.top=(e.clientY+24)+'px'; }; document.addEventListener('mousemove', petMoveHandler); }
+function disablePetBadge(){ const p=document.getElementById('petBadge'); if(p) p.remove(); if(petMoveHandler) { document.removeEventListener('mousemove', petMoveHandler); petMoveHandler=null; } petOn=false; }
+
+let soundOn=false; let audioCtx=null;
+function blip(){ if(!soundOn) return; try{ audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.value=880; g.gain.setValueAtTime(0.06,audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.12); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.12); }catch(e){} }
+
+/* ---------- original earn/track modified to per-user ---------- */
+function earn(base,x,y){ if(!ensureUser()) return; let amt=base; if(users[currentUser].owned.includes('doubleCoins')) amt*=2; if(users[currentUser].owned.includes('luckyCharm') && Math.random()<0.1){ amt*=5; toast('🍀 LUCKY! x5 coins!'); } userAddCoins(amt,x,y); blip(); }
+
+/* Achievements per user */
+const ACHIEVEMENTS=[ {at:1,msg:'🏅 Achievement: First Match — played your first game!'}, {at:10,msg:'🏅 Achievement: Team Player — 10 games played!'}, {at:25,msg:'🏅 Achievement: Squad Grinder — 25 games played!'}, {at:50,msg:'🏅 Achievement: THE BIG LEAGUE — 50 games played!'} ];
+function checkAchievementsForUser(){ if(!ensureUser()) return; const u = users[currentUser]; const a=ACHIEVEMENTS.find(a=>a.at===u.plays); if(a) toast(a.msg); }
+
+/* trackPlay adapted */
+function trackPlay(name){
+  if(!ensureUser()) return;
+  const u = users[currentUser];
+  u.plays++;
+  u.recent = u.recent || [];
+  u.recent = u.recent.filter(x=>x!==name);
+  u.recent.unshift(name); u.recent = u.recent.slice(0,10);
+  userEarn(5);
+  saveUsers(); checkAchievementsForUser();
+}
+
+/* ---------- shop items and gradients (kept original with group support) ---------- */
+const SHOP_ITEMS=[
+ {id:'goldTitle',name:'🏆 Golden Title',desc:'Turn the page title solid gold.',price:50, apply(){const h=document.querySelector('h1'); if(h && !h.classList.contains('rainbow')){ h.style.background='linear-gradient(135deg,#facc15,#f59e0b,#fde68a)'; h.style.webkitBackgroundClip='text'; h.style.backgroundClip='text'; h.style.color='transparent'; users[currentUser] && users[currentUser].activeEffects && users[currentUser].activeEffects.includes('goldTitle')||applyEffectById('goldTitle'); }}},
+ {id:'rainbowTitle',name:'🌈 Rainbow Title',desc:'Animated rainbow flowing through the title.',price:110, apply(){const h=document.querySelector('h1'); if(h) h.classList.add('rainbow');}},
+ {id:'spinTitle',name:'🌀 Spinning Title',desc:'The title slowly spins forever. Why? Yes.',price:80, apply(){const h=document.querySelector('h1'); if(h) h.classList.add('spin');}},
+ {id:'bluetheme',name:'🫐 Blueberry Theme',desc:'Cool blue background vibes.',price:75, apply(){document.documentElement.style.setProperty('--bg1','#080f1f');document.documentElement.style.setProperty('--bg2','#121c35');document.documentElement.style.setProperty('--accent','59,130,246');}},
+ {id:'badgeRain',name:'🌧️ Badge Rain',desc:'Double the floating badges (50 icons).',price:100, apply(){if(document.querySelectorAll('.badge').length<50) createBadges(25);}},
+ {id:'partyMode',name:'🪩 Party Mode',desc:'The whole page cycles rainbow colors.',price:150, apply(){document.body.classList.add('party');}},
+ {id:'bigSplash',name:'📢 Mega Splash',desc:'Splash text gets twice as big.',price:60, apply(){const s=document.getElementById('splash'); if(s) s.style.fontSize='34px';}},
+ {id:'vipBadge',name:'👑 VIP Badge',desc:'Crown next to your coin counter. Pure flex.',price:250, apply(){updateCoins();}},
+ {id:'teamCursor',name:'🖱️ Team Cursor',desc:'Your mouse cursor becomes a Scott 1 badge.',price:90, apply(){document.body.classList.add('team-cursor');}},
+ {id:'clickSparks',name:'✨ Click Sparks',desc:'Golden sparks explode everywhere you click.',price:120, apply(){enableClickSparks();}},
+ {id:'petBadge',name:'🐀 Pet Mascot',desc:'A little Scott 1 mascot follows your mouse around.',price:170, apply(){enablePetBadge();}},
+ {id:'snowMode',name:'❄️ Snow Mode',desc:'Gentle snow falls over the page. Cozy.',price:100, apply(){startSnow();}},
+ {id:'doubleCoins',name:'💰 2x Coins (permanent)',desc:'All coin earnings doubled forever.',price:400, apply(){}},
+ {id:'luckyCharm',name:'🍀 Lucky Charm',desc:'10% chance any coin gain pays x5.',price:300, apply(){}},
+ {id:'gradSunset',name:'🌅 Sunset Gradient BG',desc:'Animated orange→pink→purple flowing background.',price:120,group:'bg', apply(){if(users[currentUser] && users[currentUser].activeGradient==='grad-sunset') setGradientForUser('grad-sunset');}},
+ {id:'gradOcean',name:'🌊 Ocean Gradient BG',desc:'Animated deep blue→teal flowing background.',price:120,group:'bg', apply(){if(users[currentUser] && users[currentUser].activeGradient==='grad-ocean') setGradientForUser('grad-ocean');}},
+ {id:'gradGalaxy',name:'🌌 Galaxy Gradient BG',desc:'Animated dark indigo→magenta space background.',price:180,group:'bg', apply(){if(users[currentUser] && users[currentUser].activeGradient==='grad-galaxy') setGradientForUser('grad-galaxy');}},
+ {id:'gradGold',name:'🛡️ Scott 1 Gold Gradient BG',desc:'Animated molten Scott 1 gold flowing background.',price:150,group:'bg', apply(){if(users[currentUser] && users[currentUser].activeGradient==='grad-gold') setGradientForUser('grad-gold');}},
+ {id:'matrixRain',name:'💻 Matrix Badge Rain',desc:'Badges fall from the top of the screen forever.',price:200, apply(){startMatrixRain();}},
+ {id:'rgbBorders',name:'🌈 RGB Game Borders',desc:'Gamer RGB glow on every game button.',price:130, apply(){if(document.getElementById('rgbStyle')) return; const s=document.createElement('style'); s.id='rgbStyle'; s.textContent='.game button{animation:rgbBorder 3s linear infinite;}@keyframes rgbBorder{0%{border-color:#f43f5e}25%{border-color:#facc15}50%{border-color:#22c55e}75%{border-color:#3b82f6}100%{border-color:#f43f5e}}'; document.head.appendChild(s);}},
+ {id:'customSplash',name:'✏️ Custom Splash Text',desc:'Write your own splash text (shows in rotation).',price:90, apply(){if(!users[currentUser].customSplash){const t=prompt('Your custom splash text:'); if(t){ users[currentUser].customSplash = t; splashExtra.push(t); saveUsers(); } } if(users[currentUser].customSplash && !splashExtra.includes(users[currentUser].customSplash)) splashExtra.push(users[currentUser].customSplash);}},
+ {id:'soundFx',name:'🔊 Coin Sounds',desc:'Satisfying blip every time you earn coins.',price:140, apply(){soundOn=true;}}
+];
+
+const GRAD_MAP={gradSunset:'grad-sunset',gradOcean:'grad-ocean',gradGalaxy:'grad-galaxy',gradGold:'grad-gold'};
+const GRAD_CLASSES = Object.values(GRAD_MAP);
+
+/* ---------- games rebuild: mark vip games (escape in name) and hide for non-vip ---------- */
+let gamesRebuilt=false;
+function rebuildGames(){
+  const inputs=document.querySelectorAll('input[type="button"]');
+  if(!inputs.length) return false;
+  inputs.forEach(old=>{
+    const wrapper=document.createElement('div'); wrapper.className='game';
+    const btn=document.createElement('button'); btn.textContent=old.value;
+    const orig=old.onclick;
+    btn.onclick=(e)=>{ if(!ensureUser()) { toast('Please sign in to play'); return; } // require login to play
+      // VIP gating: if game contains 'escape' and user is not vip/admin, prompt for VIP
+      const title = btn.textContent.toLowerCase();
+      if(title.includes('escape') || title.includes('escaperoad') || btn.dataset.vip==='true'){
+        const u = users[currentUser];
+        if(!(u && (u.isVIP || u.isAdmin))){ if(confirm('This is a VIP game. Enter admin code to unlock?')){ promptAdminForVIPAccess(); } else { toast('VIP access required'); return; } }
+      }
+      trackPlay(btn.textContent);
+      if(orig) orig.call(old,e);
+    };
+    // mark VIP if name contains 'escape'
+    if(old.value && old.value.toLowerCase().includes('escape')) btn.dataset.vip='true';
+    const star=document.createElement('span'); star.className='star'; star.textContent = (users[currentUser] && users[currentUser].favourites && users[currentUser].favourites.includes(old.value)) ? '★':'☆';
+    star.onclick=(e)=>{ e.stopPropagation(); if(!ensureUser()) return; const name=btn.textContent; const u = users[currentUser]; u.favourites = u.favourites||[]; if(u.favourites.includes(name)){ u.favourites = u.favourites.filter(x=>x!==name); star.textContent='☆'; } else { u.favourites.unshift(name); star.textContent='★'; } saveUsers(); };
+    wrapper.appendChild(btn); wrapper.appendChild(star); old.replaceWith(wrapper);
+  });
+  gamesRebuilt=true; return true;
+}
+
+/* ---------- search and UI wiring ---------- */
+function setupSearch(){ const input=document.getElementById('mainSearch'); input.addEventListener('input',()=>{ const term=input.value.toLowerCase().trim(); document.querySelectorAll('.letter-section').forEach(section=>{ let visible=0; section.querySelectorAll('.game').forEach(game=>{ const name=game.querySelector('button').textContent.toLowerCase(); if(name.includes(term)){ game.style.display=''; visible++; } else game.style.display='none'; }); section.style.display = visible>0 ? '' : 'none'; }); }); }
+
+window.addEventListener('load',()=>{
+  // UI init
+  applyUserStateToUI();
+  setupAuthUI();
+  setupSearch();
+
+  createBadges(25);
+  // poll for external games (like original) and rebuild them when present
+  let tries=0;
+  const poll=setInterval(()=>{
+    tries++;
+    if(rebuildGames()||tries>30){
+      clearInterval(poll);
+      // re-apply owned items for current user if signed in
+      if(currentUser){
+        (users[currentUser].owned||[]).forEach(id=>{ const it = SHOP_ITEMS.find(s=>s.id===id); if(it) try{ it.apply(); }catch(e){} });
+        if(users[currentUser].activeGradient) document.body.classList.add(users[currentUser].activeGradient);
+      }
+      updateCoins();
+    }
+  },500);
+});
+
+/* ---------- badges & floating UI from original ---------- */
+function createBadges(count){
+  for(let i=0;i<(count||25);i++){
+    const el=document.createElement('div'); el.className='badge'; el.textContent='🛡️';
+    el.style.left=Math.random()*100+'vw'; el.style.top=Math.random()*100+'vh'; el.style.fontSize=(20+Math.random()*60)+'px'; el.style.animationDuration=(8+Math.random()*12)+'s';
+    el.onclick=(e)=>{
+      if(!ensureUser()) { toast('Sign in to earn coins'); return; }
+      users[currentUser].badgeClicks = (users[currentUser].badgeClicks||0)+1;
+      userEarn(1,e.clientX,e.clientY);
+      el.style.transition='0.3s'; el.style.opacity='0'; el.style.pointerEvents='none';
+      setTimeout(()=>{ el.style.opacity='0.8'; el.style.pointerEvents='auto'; el.style.left=Math.random()*100+'vw'; el.style.top=Math.random()*100+'vh'; },3000);
+    };
+    document.body.appendChild(el);
+  }
+}
+
+/* ---------- VIP area & admin unlocking ---------- */
+const ADMIN_CODE = 'UncJohn'; // per your request (warning: insecure client-side secret)
+function promptAdminForVIPAccess(){
+  if(!ensureUser()) return;
+  const code = prompt('Enter admin code to unlock VIP for your account:');
+  if(code === ADMIN_CODE){
+    users[currentUser].isAdmin = true; users[currentUser].isVIP = true; saveUsers(); updateCoins(); toast('Admin/VIP access granted to your account.');
+    renderAdmin(); renderShop();
+  } else { toast('Wrong admin code'); }
+}
+
+/* VIP button wiring */
+document.getElementById('vipAreaBtn').addEventListener('click', ()=>{
+  if(!ensureUser()) { toast('Please sign in to access VIP area'); return; }
+  const u = users[currentUser];
+  if(u.isVIP || u.isAdmin) {
+    // show VIP area — for demo we just open shop and filter vip games
+    openShop();
+    toast('VIP area open — VIP games visible.');
+  } else {
+    if(confirm('VIP area is restricted. Enter admin code to unlock VIP?')) promptAdminForVIPAccess();
+  }
+});
+
+/* ---------- Admin panel adapted to per-user ---------- */
+function openAdmin(){
+  if(!ensureUser()) { toast('Sign in as admin to open admin.'); return; }
+  const u = users[currentUser];
+  if(!u.isAdmin){
+    // allow admin unlock via code prompt
+    const pw = prompt('Admin password:');
+    if(pw !== ADMIN_CODE){ if(pw!==null) toast('❌ Wrong password'); return; }
+    u.isAdmin = true; u.isVIP = true; saveUsers(); toast('🛡️ Admin unlocked.');
+  }
+  renderAdmin();
+  document.getElementById('adminPanel').classList.add('open');
+  updateCoins();
+}
+
+function renderAdmin(){
+  const p=document.getElementById('adminPanel'); if(!p) return;
+  const u = users[currentUser];
+  p.innerHTML = '<button class="panel-close" onclick="closePanels()">✕</button><h2>🛡️ Admin Panel</h2><p style="font-size:12px;opacity:0.7">Admin features (client-side unsafe)</p>';
+  const mk=(txt,fn,cls)=>{ const b=document.createElement('button'); b.className='admin-btn '+(cls||''); b.textContent=txt; b.onclick=fn; p.appendChild(b); };
+  mk('♾️ Unlimited Gold — toggle', ()=>{ u.coins = 999999999; saveUsers(); updateCoins(); toast('♾️ UNLIMITED GOLD SET'); }, '');
+  mk('💸 Give myself +1,000 coins', ()=>{ u.coins += 1000; saveUsers(); updateCoins(); toast('+1,000 coins'); });
+  mk('💰 Give myself +10,000 coins', ()=>{ u.coins += 10000; saveUsers(); updateCoins(); toast('+10,000 coins'); });
+  mk('🛍️ Unlock EVERY shop item', ()=>{ SHOP_ITEMS.forEach(i=>{ if(!u.owned.includes(i.id)) u.owned.push(i.id); }); saveUsers(); renderShop(); toast('All items unlocked'); });
+  mk('🏅 Max achievements (50 plays)', ()=>{ u.plays = 50; saveUsers(); toast('Plays set to 50'); });
+  mk('👑 Grant VIP to user', ()=>{ u.isVIP = true; saveUsers(); toast('User is VIP'); renderShop(); });
+  mk('🚪 Log out admin', ()=>{ u.isAdmin = false; saveUsers(); toast('Admin privileges removed'); renderAdmin(); });
+  const stats=document.createElement('p'); stats.style.cssText='font-size:12px;opacity:0.6;margin-top:14px';
+  stats.innerHTML = '📊 User stats — coins: '+u.coins+'<br>games played: '+(u.plays||0)+'<br>badges clicked: '+(u.badgeClicks||0)+'<br>items owned: '+(u.owned?u.owned.length:0)+'/'+SHOP_ITEMS.length;
+  p.appendChild(stats);
+}
+
+/* ---------- AUTH UI wiring ---------- */
+function setupAuthUI(){
+  const overlay = document.getElementById('authOverlay');
+  const toggleSignIn = document.getElementById('toggleSignIn');
+  const toggleSignUp = document.getElementById('toggleSignUp');
+  const authTitle = document.getElementById('authTitle');
+  const authUser = document.getElementById('authUser');
+  const authPass = document.getElementById('authPass');
+  const authSubmit = document.getElementById('authSubmit');
+  const continueGuest = document.getElementById('continueGuest');
+
+  let mode = 'signin'; // or 'signup'
+  toggleSignIn.onclick = ()=>{ mode='signin'; toggleSignIn.style.opacity=1; toggleSignUp.style.opacity=0.7; authSubmit.textContent='Sign In'; authTitle.textContent='Welcome — Sign In'; };
+  toggleSignUp.onclick = ()=>{ mode='signup'; toggleSignUp.style.opacity=1; toggleSignIn.style.opacity=0.7; authSubmit.textContent='Sign Up'; authTitle.textContent='Create your Account'; };
+  authSubmit.onclick = async ()=>{
+    const u = authUser.value.trim(); const p = authPass.value;
+    if(!u || !p) { toast('Enter both username and password'); return; }
+    try{
+      if(mode==='signup'){ await registerUser(u,p); toast('Account created — now sign in'); mode='signin'; authSubmit.textContent='Sign In'; authTitle.textContent='Welcome — Sign In'; }
+      else { await loginUser(u,p); overlay.style.display='none'; toast('Signed in as '+u); applyUserStateToUI(); }
+    }catch(err){ toast(String(err)); }
+  };
+  continueGuest.onclick = ()=>{ overlay.style.display='none'; setCurrentUser(null); toast('Continuing as guest — some features will be disabled'); applyUserStateToUI(); };
+}
+
+/* ---------- apply user state to UI (coin counter, buttons enabled/disabled) ---------- */
+function applyUserStateToUI(){
+  updateCoins();
+  // admin button wiring
+  document.getElementById('adminOpenBtn').onclick = openAdmin;
+  // dashboard/game list
+  document.getElementById('gameListBtn').onclick = ()=> window.open('https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/','_blank');
+  // coin counter click opens shop (requires login)
+  const cc = document.getElementById('coinCounter'); cc.onclick = ()=> { if(!ensureUser()) toast('Sign in to access shop'); else openShop(); };
+
+  // update coin counter text: include username
+  const u = currentUser ? users[currentUser] : null;
+  if(u) cc.title = 'Signed in as: ' + currentUser + (u.isVIP ? ' (VIP)' : '') + (u.isAdmin ? ' (ADMIN)' : '');
+  else cc.title = 'Not signed in';
+}
+
+/* ---------- login helpers available on page ---------- */
+async function handleManualLogin(username,password){
+  try{ await loginUser(username,password); document.getElementById('authOverlay').style.display='none'; toast('Signed in as '+username); } catch(e){ toast(String(e)); }
+}
+
+/* ---------- panic, splash, konami, typed (kept original) ---------- */
+let panicKey = localStorage.getItem('panicKey') || 'z';
+let panicURL='https://www.google.com';
+function panic(){ window.location.href = panicURL; }
+document.addEventListener("keydown",(e)=>{ if(document.activeElement && document.activeElement.tagName === "INPUT") return; if(e.key.toLowerCase() === panicKey.toLowerCase()) panic(); });
+document.addEventListener('keydown',(e)=>{ if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==='z') panic(); });
+document.querySelectorAll(".toolbar button").forEach(btn=>{ if(btn.innerText.toLowerCase().includes("dashboard")){ btn.innerText = "🚨 Panic"; btn.onclick = panic; } });
+
+const splashTexts = ["SCOTT 1 4 LIFE!","INSANE!","LET'S GO!","GAME ON!","CRAZY!","PRO GAMER MOVE","UNBLOCKED!","100% REAL","SUS?!","NO VIRUS 😎","GREAT STUFF!","BRILLIANT!","NATIONAL TEAM!","Also try Minecraft!","Now with coins!","Better than ever!","System working!","EZ Clap!","Click the badges!","Buy the shop stuff!","Go Scott 1!","Now with ADMIN!","UncJohn who?","Team approved!"];
+const splashEl = document.getElementById("splash");
+function newSplash(){ const pool = splashTexts.concat(splashExtra); if(splashEl) splashEl.innerText = pool[Math.floor(Math.random()*pool.length)]; }
+newSplash(); setInterval(newSplash,8000);
+
+const konami = ["arrowup","arrowup","arrowdown","arrowdown","arrowleft","arrowright","arrowleft","arrowright","b","a"];
+let kIndex = 0;
+document.addEventListener("keydown",(e)=>{ if(e.key.toLowerCase() === konami[kIndex]){ kIndex++; if(kIndex === konami.length){ kIndex = 0; if(ensureUser()) { userEarn(100); toast("🎮 KONAMI CODE! +100 coins!"); } else toast('Sign in to redeem Konami code'); } } else kIndex = 0; });
+let typed=""; document.addEventListener("keydown",(e)=>{ if(document.activeElement && document.activeElement.tagName==="INPUT")return; if(e.key.length!==1)return; typed=(typed+e.key.toLowerCase()).slice(-6); if(typed==="scott1"){ typed=""; if(ensureUser()){ userEarn(25); toast("🛡️ You typed the magic word! +25 coins"); } else toast('Sign in to claim'); } });
+
+/* ---------- small helpers: close/open panels ---------- */
+function closePanels(){ ['favPanel','shopPanel','recentPanel','adminPanel'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('open'); }); }
+function openShop(){ if(!ensureUser()){ toast('Sign in to access shop'); return; } const p=document.getElementById('shopPanel'); const wasOpen=p.classList.contains('open'); closePanels(); if(!wasOpen){ renderShop(); p.classList.add('open'); } }
+function openFav(){ if(!ensureUser()){ toast('Sign in to use Favorites'); return; } listPanel('favPanel','⭐ Favorites', users[currentUser].favourites||[],'No favorites yet — hit the ☆ on any game.','★ '); }
+function openRecent(){ if(!ensureUser()){ toast('Sign in to see recent'); return; } listPanel('recentPanel','🕘 Recently Played', users[currentUser].recent||[],'Nothing yet — go play something!'); }
+
+/* generic panel helper */
+function listPanel(id,title,items,emptyMsg,prefix){
+  const p=document.getElementById(id); const wasOpen = p.classList.contains('open'); closePanels(); if(wasOpen) return;
+  p.innerHTML = '<button class="panel-close" onclick="closePanels()">✕</button><h2>'+title+'</h2>';
+  if(!items || !items.length) p.innerHTML += '<p style="opacity:0.6;font-size:13px">'+emptyMsg+'</p>';
+  (items||[]).forEach(name=>{ const d=document.createElement('div'); d.textContent=(prefix||'')+name; d.style.cssText='margin:8px 0;cursor:pointer;padding:8px;border-radius:8px;background:rgba(255,255,255,0.06)'; d.onclick = ()=>{ const btn=[...document.querySelectorAll('.game button')].find(b=>b.textContent===name); if(btn) btn.click(); }; p.appendChild(d); });
+  p.classList.add('open');
+}
+
+/* ---------- utility: persist shortcut (for global save, used rarely) ---------- */
+function persist(){ saveUsers(); }
+
+/* ---------- last: credit ---------- */
+const credit = document.createElement("div"); credit.innerText = "created by RadioactiveDonuts (modified)"; credit.style = "position:fixed;bottom:10px;right:10px;font-size:12px;opacity:0.7;"; document.body.appendChild(credit);
+</script>
+</body>
+</html>
