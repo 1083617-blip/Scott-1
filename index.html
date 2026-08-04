@@ -222,9 +222,15 @@ function getUserObj(u){
 
 /* very small sha256 helper using SubtleCrypto for password hashing (async) */
 async function sha256Hex(str){
-  const enc = new TextEncoder().encode(str);
-  const hash = await crypto.subtle.digest('SHA-256', enc);
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+  try{
+    if(window.crypto && crypto.subtle && crypto.subtle.digest){
+      const enc = new TextEncoder().encode(str);
+      const hash = await crypto.subtle.digest('SHA-256', enc);
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+  }catch(e){ console.warn('SubtleCrypto failed:',e); }
+  // fallback (not cryptographically secure) for older contexts — demo only
+  try{ return btoa(unescape(encodeURIComponent(str))).slice(0,64); }catch(e){ return String(str); }
 }
 
 /* register/login */
@@ -675,19 +681,22 @@ function setupAuthUI(){
   const authPass = document.getElementById('authPass');
   const authSubmit = document.getElementById('authSubmit');
   const continueGuest = document.getElementById('continueGuest');
+  // inline status
+  let authStatus = document.getElementById('authStatus');
+  if(!authStatus){ authStatus = document.createElement('div'); authStatus.id='authStatus'; authStatus.style.cssText='color:#ffd27a;margin-top:8px;font-size:13px;min-height:18px'; document.getElementById('authBox').appendChild(authStatus); }
 
   let mode = 'signin'; // or 'signup'
-  toggleSignIn.onclick = ()=>{ mode='signin'; toggleSignIn.style.opacity=1; toggleSignUp.style.opacity=0.7; authSubmit.textContent='Sign In'; authTitle.textContent='Welcome — Sign In'; };
-  toggleSignUp.onclick = ()=>{ mode='signup'; toggleSignUp.style.opacity=1; toggleSignIn.style.opacity=0.7; authSubmit.textContent='Sign Up'; authTitle.textContent='Create your Account'; };
-  authSubmit.onclick = async ()=>{
-    const u = authUser.value.trim(); const p = authPass.value;
-    if(!u || !p) { toast('Enter both username and password'); return; }
+  toggleSignIn.addEventListener('click', ()=>{ mode='signin'; toggleSignIn.style.opacity=1; toggleSignUp.style.opacity=0.7; authSubmit.textContent='Sign In'; authTitle.textContent='Welcome — Sign In'; authStatus.textContent=''; });
+  toggleSignUp.addEventListener('click', ()=>{ mode='signup'; toggleSignUp.style.opacity=1; toggleSignIn.style.opacity=0.7; authSubmit.textContent='Sign Up'; authTitle.textContent='Create your Account'; authStatus.textContent=''; });
+  authSubmit.addEventListener('click', async (ev)=>{
+    ev.preventDefault(); const u = authUser.value.trim(); const p = authPass.value;
+    if(!u || !p) { authStatus.textContent = 'Enter both username and password'; return; }
     try{
-      if(mode==='signup'){ await registerUser(u,p); toast('Account created — now sign in'); mode='signin'; authSubmit.textContent='Sign In'; authTitle.textContent='Welcome — Sign In'; }
-      else { await loginUser(u,p); overlay.style.display='none'; toast('Signed in as '+u); applyUserStateToUI(); }
-    }catch(err){ toast(String(err)); }
-  };
-  continueGuest.onclick = ()=>{ overlay.style.display='none'; setCurrentUser(null); toast('Continuing as guest — some features will be disabled'); applyUserStateToUI(); };
+      if(mode==='signup'){ await registerUser(u,p); authStatus.textContent = 'Account created — please sign in'; mode='signin'; authSubmit.textContent='Sign In'; authTitle.textContent='Welcome — Sign In'; }
+      else { await loginUser(u,p); overlay.style.display='none'; authStatus.textContent=''; toast('Signed in as '+u); applyUserStateToUI(); }
+    }catch(err){ authStatus.textContent = String(err); }
+  });
+  continueGuest.addEventListener('click', ()=>{ overlay.style.display='none'; setCurrentUser(null); toast('Continuing as guest — some features will be disabled'); applyUserStateToUI(); });
 }
 
 /* ---------- apply user state to UI (coin counter, buttons enabled/disabled) ---------- */
