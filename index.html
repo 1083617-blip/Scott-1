@@ -33,13 +33,15 @@ h1.spin{display:inline-block;animation:titleSpin 8s linear infinite;}@keyframes 
 #favPanel,#shopPanel,#recentPanel,#adminPanel{ position:fixed;right:0;top:0;width:300px;height:100%;background:#151005;border-left:1px solid rgba(255,215,0,0.25);color:#fff;padding:18px;transform:translateX(100%);transition:.3s;overflow:auto;z-index:200;}
 #favPanel.open,#shopPanel.open,#recentPanel.open,#adminPanel.open{transform:translateX(0)}
 #adminPanel{border-left:1px solid rgba(239,68,68,0.5);background:#170808;width:320px;}
+#vipPanel{ position:fixed;right:0;top:0;width:360px;height:100%;background:linear-gradient(180deg,#0b1220,#12171f);border-left:1px solid rgba(59,130,246,0.25);color:#fff;padding:18px;transform:translateX(100%);transition:.28s;overflow:auto;z-index:210;border-top-left-radius:8px;}
+#vipPanel.open{transform:translateX(0)}
 .admin-btn{ width:100%;padding:10px;margin:6px 0;border-radius:10px;border:1px solid rgba(239,68,68,0.4); background:rgba(239,68,68,0.12);color:#fff;cursor:pointer;font-weight:700;text-align:left;font-family:Inter,sans-serif;}
 .admin-btn:hover{background:rgba(239,68,68,0.3);} .admin-btn.on{background:rgba(34,197,94,0.25);border-color:rgba(34,197,94,0.6);}
 .panel-close{float:right;background:none;border:none;color:#fff;font-size:20px;cursor:pointer;}
 .shop-item{ border:1px solid rgba(255,215,0,0.3);border-radius:14px;padding:12px;margin:10px 0; background:rgba(255,215,0,0.06);}
 .shop-item h3{margin:0 0 4px 0;font-size:15px;} .shop-item p{margin:0 0 8px 0;font-size:12px;opacity:0.75;} .shop-item button{ width:100%;padding:8px;border-radius:10px;border:none;cursor:pointer;font-weight:700; background:linear-gradient(135deg,#facc15,#f59e0b);color:#1f1608;}
 .shop-item button:disabled{background:#444;color:#999;cursor:not-allowed;} .shop-item .owned{background:#22c55e;color:#052e12;}
-#coinCounter{ position:fixed;top:12px;right:14px;z-index:300; background:rgba(0,0,0,0.55);border:1px solid rgba(255,215,0,0.4); padding:8px 16px;border-radius:999px;font-weight:800;font-size:16px; backdrop-filter:blur(10px);cursor:pointer;user-select:none;}
+#coinCounter{ position:fixed;top:12px;right:14px;z-index:300; background:rgba(128, 15, 15, 0.55) 0.55);border:1px solid rgba(255,215,0,0.4); padding:8px 16px;border-radius:999px;font-weight:800;font-size:16px; backdrop-filter:blur(10px);cursor:pointer;user-select:none;}
 .badge{position:fixed;pointer-events:auto;cursor:pointer;animation:spin linear infinite;opacity:0.8;z-index:5;user-select:none;}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .coin-pop{ position:fixed;pointer-events:none;font-weight:800;color:#facc15;z-index:400; animation:rise 0.9s ease-out forwards;text-shadow:0 2px 6px rgba(0,0,0,0.6);} @keyframes rise{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-50px)}}
 #splash{ position:absolute;right:-40px;top:52px;color:#ffff00;font-weight:800;font-size:22px; transform:rotate(-18deg);transform-origin:center;text-shadow:2px 2px 0 #3f3f00; animation:splashPulse 0.45s ease-in-out infinite alternate;pointer-events:none;z-index:20;white-space:nowrap;} @keyframes splashPulse{from{transform:rotate(-18deg) scale(1);}to{transform:rotate(-18deg) scale(1.1)}}
@@ -66,6 +68,26 @@ body.team-cursor{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/20
 #logoutBtn{padding:8px 12px;border-radius:10px;border:none;background:rgba(255,255,255,0.06);color:#fff;}
 </style>
 </head>
+<style>
+/* Extra UI polish: modern buttons and small animations */
+.btn{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:800;letter-spacing:0.2px;transition:transform .18s ease,box-shadow .18s ease,opacity .18s;position:relative;overflow:hidden}
+.btn:focus{outline:none;box-shadow:0 6px 20px rgba(0,0,0,0.45),0 0 0 4px rgba(59,130,246,0.12)}
+.toolbar .btn{background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06);box-shadow:0 6px 18px rgba(0,0,0,0.35);}
+.toolbar .btn:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 18px 40px rgba(0,0,0,0.55),0 0 24px rgba(59,130,246,0.06)}
+.accent-btn{background:linear-gradient(90deg,#f59e0b,#facc15);color:#111;border-radius:12px;padding:10px 14px}
+.ghost-btn{background:transparent;border:1px dashed rgba(255,255,255,0.06);}
+.game button{transition:transform .25s cubic-bezier(.2,.9,.3,1),box-shadow .25s}
+.game button:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 14px 36px rgba(0,0,0,0.55)}
+.star{transition:transform .22s ease,color .22s}
+.coin-pop{font-size:14px}
+/* subtle intro animation */
+@keyframes floatIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.float-in{animation:floatIn .6s ease both}
+/* quick shimmer */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.shimmer{background:linear-gradient(90deg,rgba(255,255,255,0.06),rgba(255,255,255,0.18),rgba(255,255,255,0.06));background-size:200% 100%;animation:shimmer 2.5s linear infinite}
+</style>
+</head>
 <body>
 <div id="coinCounter" title="Open the Scott 1 Shop">🪙 0</div>
 
@@ -89,6 +111,7 @@ body.team-cursor{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/20
 
   <div id="favPanel"></div>
   <div id="shopPanel"></div>
+  <div id="vipPanel"></div>
   <div id="recentPanel"></div>
   <div id="adminPanel"></div>
 
@@ -158,9 +181,40 @@ function saveUsers(){
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
 }
 function setCurrentUser(username){
+  // clear visuals from previous session so a different user doesn't inherit them
+  clearSessionVisuals();
+  const prev = currentUser;
   currentUser = username;
   localStorage.setItem(CURRENT_USER_KEY, username||'');
   applyUserStateToUI();
+  // if signed in as a user, apply their owned items / active effects
+  if(currentUser && users[currentUser]){
+    const u = users[currentUser];
+    (u.owned||[]).forEach(id=>{ const it = SHOP_ITEMS.find(s=>s.id===id); if(it && it.apply) try{ it.apply(); }catch(e){} });
+    (u.activeEffects||[]).forEach(id=>{ const it = SHOP_ITEMS.find(s=>s.id===id); if(it && it.apply) try{ it.apply(); }catch(e){} });
+    if(u.activeGradient) document.body.classList.add(u.activeGradient);
+  }
+  // refresh game list visuals (stars, vip flags)
+  rebuildGames();
+  createBadges(25);
+  updateCoins();
+}
+
+// Remove visual-only session artifacts without altering stored user data
+function clearSessionVisuals(){
+  // remove floating badges, snow, matrix, pet, sparks, RGB style, party, cursor
+  document.querySelectorAll('.badge').forEach(e=>e.remove());
+  document.querySelectorAll('.snowflake').forEach(e=>e.remove());
+  document.querySelectorAll('.matrix-drop').forEach(e=>e.remove());
+  const pet=document.getElementById('petBadge'); if(pet) pet.remove();
+  const rgb=document.getElementById('rgbStyle'); if(rgb) rgb.remove();
+  document.body.classList.remove('party','team-cursor');
+  // remove any spark handlers
+  if(typeof sparkHandler === 'function'){ document.removeEventListener('click', sparkHandler); sparkHandler=null; }
+  // reset flags
+  matrixRainOn=false; snowOn=false; sparksOn=false; petOn=false; soundOn=false;
+  // remove temporary panels
+  ['favPanel','shopPanel','recentPanel','adminPanel','vipPanel'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('open'); });
 }
 function getUserObj(u){
   return users[u] || null;
@@ -512,6 +566,8 @@ window.addEventListener('load',()=>{
       updateCoins();
     }
   },500);
+  // UI polish: apply cool styles and interactions
+  applyCoolUI();
 });
 
 /* ---------- badges & floating UI from original ---------- */
@@ -542,17 +598,36 @@ function promptAdminForVIPAccess(){
 }
 
 /* VIP button wiring */
-document.getElementById('vipAreaBtn').addEventListener('click', ()=>{
+function renderVIPPanel(){
+  const p = document.getElementById('vipPanel'); if(!p) return;
+  p.innerHTML = '<button class="panel-close" onclick="closePanels()">✕</button><h2>👑 VIP — Escape Road Games</h2><p style="font-size:13px;opacity:0.8">Only VIPs can play these curated Escape Road / Escape style games.</p>';
+  // collect vip games from current DOM
+  const games = [...document.querySelectorAll('.game button')].filter(b=>{ const t=b.textContent.toLowerCase(); return t.includes('escape') || t.includes('escaperoad') || b.dataset.vip==='true'; });
+  if(!games.length) p.innerHTML += '<p style="opacity:0.6;margin-top:12px">No VIP games detected yet. Load the games first.</p>';
+  games.forEach(b=>{
+    const row = document.createElement('div'); row.style.cssText='margin:10px 0;padding:10px;border-radius:10px;background:rgba(255,255,255,0.03);display:flex;align-items:center;gap:8px;';
+    const title = document.createElement('div'); title.textContent = b.textContent; title.style.cssText='flex:1;font-weight:700';
+    const play = document.createElement('button'); play.textContent='Play'; play.style.cssText='padding:8px 10px;border-radius:8px;border:none;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;font-weight:700;cursor:pointer;';
+    play.onclick = ()=>{
+      if(!ensureUser()) { toast('Sign in to play VIP games'); return; }
+      const u = users[currentUser];
+      if(!(u && (u.isVIP || u.isAdmin))){ if(confirm('VIP only — enter admin code to unlock?')) promptAdminForVIPAccess(); else { toast('VIP access required'); return; } }
+      // trigger original button click
+      b.click();
+    };
+    row.appendChild(title); row.appendChild(play); p.appendChild(row);
+  });
+  p.classList.add('open');
+}
+
+function openVIPArea(){
   if(!ensureUser()) { toast('Please sign in to access VIP area'); return; }
   const u = users[currentUser];
-  if(u.isVIP || u.isAdmin) {
-    // show VIP area — for demo we just open shop and filter vip games
-    openShop();
-    toast('VIP area open — VIP games visible.');
-  } else {
-    if(confirm('VIP area is restricted. Enter admin code to unlock VIP?')) promptAdminForVIPAccess();
-  }
-});
+  if(u.isVIP || u.isAdmin){ closePanels(); renderVIPPanel(); document.getElementById('vipPanel').classList.add('open'); toast('VIP area open — enjoy the Escape Road games.'); }
+  else { if(confirm('VIP area is restricted. Enter admin code to unlock VIP?')) promptAdminForVIPAccess(); }
+}
+
+document.getElementById('vipAreaBtn').addEventListener('click', openVIPArea);
 
 /* ---------- Admin panel adapted to per-user ---------- */
 function openAdmin(){
@@ -651,7 +726,7 @@ document.addEventListener("keydown",(e)=>{ if(e.key.toLowerCase() === konami[kIn
 let typed=""; document.addEventListener("keydown",(e)=>{ if(document.activeElement && document.activeElement.tagName==="INPUT")return; if(e.key.length!==1)return; typed=(typed+e.key.toLowerCase()).slice(-6); if(typed==="scott1"){ typed=""; if(ensureUser()){ userEarn(25); toast("🛡️ You typed the magic word! +25 coins"); } else toast('Sign in to claim'); } });
 
 /* ---------- small helpers: close/open panels ---------- */
-function closePanels(){ ['favPanel','shopPanel','recentPanel','adminPanel'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('open'); }); }
+function closePanels(){ ['favPanel','shopPanel','recentPanel','adminPanel','vipPanel'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('open'); }); }
 function openShop(){ if(!ensureUser()){ toast('Sign in to access shop'); return; } const p=document.getElementById('shopPanel'); const wasOpen=p.classList.contains('open'); closePanels(); if(!wasOpen){ renderShop(); p.classList.add('open'); } }
 function openFav(){ if(!ensureUser()){ toast('Sign in to use Favorites'); return; } listPanel('favPanel','⭐ Favorites', users[currentUser].favourites||[],'No favorites yet — hit the ☆ on any game.','★ '); }
 function openRecent(){ if(!ensureUser()){ toast('Sign in to see recent'); return; } listPanel('recentPanel','🕘 Recently Played', users[currentUser].recent||[],'Nothing yet — go play something!'); }
@@ -670,6 +745,27 @@ function persist(){ saveUsers(); }
 
 /* ---------- last: credit ---------- */
 const credit = document.createElement("div"); credit.innerText = "created by RadioactiveDonuts (modified)"; credit.style = "position:fixed;bottom:10px;right:10px;font-size:12px;opacity:0.7;"; document.body.appendChild(credit);
+
+/* ---------- extra UI script: button ripples and entrance effects ---------- */
+function applyCoolUI(){
+  // add btn class to all buttons
+  document.querySelectorAll('button').forEach(b=>{ b.classList.add('btn'); });
+  // style specific buttons
+  document.getElementById('lolbutton')?.classList.add('accent-btn');
+  document.getElementById('coinCounter')?.classList.add('float-in');
+  document.querySelectorAll('.shop-item button').forEach(b=>b.classList.add('accent-btn'));
+  // ripple effect
+  document.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      const r=document.createElement('span'); r.style.cssText='position:absolute;left:0;top:0;width:0;height:0;border-radius:50%;background:rgba(255,255,255,0.18);transform:translate(-50%,-50%);pointer-events:none;opacity:0.9;';
+      this.appendChild(r);
+      const rect=this.getBoundingClientRect(); const x=e.clientX-rect.left; const y=e.clientY-rect.top; r.style.left = x+'px'; r.style.top = y+'px'; const size=Math.max(rect.width,rect.height)*1.8; r.animate([{width:'0px',height:'0px',opacity:0.9},{width:size+'px',height:size+'px',opacity:0}],{duration:420,easing:'cubic-bezier(.2,.9,.3,1)'});
+      setTimeout(()=>r.remove(),450);
+    });
+  });
+  // small floating animation for title
+  const h=document.querySelector('h1'); if(h){ h.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:4500,iterations:Infinity}); }
+}
 </script>
 </body>
 </html>
