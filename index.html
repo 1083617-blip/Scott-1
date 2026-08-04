@@ -152,7 +152,7 @@ body.team-cursor{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/20
     <div id="splashCenter">
       <h1 id="splashTitle">Scott 1</h1>
       <p id="splashSubtitle">Welcome to the National Team</p>
-      <div style="margin-top:18px"><button id="enterSiteBtn" class="accent-btn">Enter Site</button></div>
+      <div style="margin-top:18px"></div>
     </div>
   </div>
 </div>
@@ -690,7 +690,6 @@ function setupAuthUI(){
   // Splash overlay initializer: create animated shield emojis and wire Enter button
   const overlay = document.getElementById('authOverlay');
   const splashWrap = document.getElementById('splashOverlay');
-  const enter = document.getElementById('enterSiteBtn');
   // create moving shields
   const count = 28;
   for(let i=0;i<count;i++){
@@ -703,7 +702,7 @@ function setupAuthUI(){
     splashWrap.appendChild(s);
   }
   // dismiss overlay on Enter
-  if(enter) enter.addEventListener('click', ()=>{ overlay.style.display='none'; setCurrentUser(null); toast('Welcome — continuing as guest'); });
+  // Enter button removed; overlay remains hidden by default
   // also allow clicking background to dismiss
   overlay.addEventListener('click',(e)=>{ if(e.target===overlay) { overlay.style.display='none'; setCurrentUser(null); } });
 }
