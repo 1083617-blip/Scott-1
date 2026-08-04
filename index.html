@@ -586,6 +586,8 @@ window.addEventListener('load',()=>{
   },500);
   // UI polish: apply cool styles and interactions
   applyCoolUI();
+  // hide splash overlay so site goes straight to main page
+  const ao = document.getElementById('authOverlay'); if(ao) ao.style.display = 'none';
 });
 
 /* ---------- badges & floating UI from original ---------- */
