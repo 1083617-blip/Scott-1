@@ -67,6 +67,21 @@ body.team-cursor{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/20
 #authFooter button{padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(135deg,#facc15,#f59e0b);font-weight:700;color:#111;}
 #logoutBtn{padding:8px 12px;border-radius:10px;border:none;background:rgba(255,255,255,0.06);color:#fff;}
 </style>
+
+<style>
+/* Splash overlay styles */
+#authOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:800;background:radial-gradient(circle at center, rgba(0,0,0,0.6), rgba(0,0,0,0.85));}
+#splashOverlay{position:relative;width:100%;height:100%;overflow:hidden;}
+#splashCenter{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;z-index:900}
+#splashTitle{font-size:96px;margin:0;padding:0;letter-spacing:2px;background:linear-gradient(90deg,#facc15,#f59e0b,#f97316);-webkit-background-clip:text;background-clip:text;color:transparent;animation:glowTitle 4s ease-in-out infinite;}
+#splashSubtitle{font-size:18px;opacity:0.85;margin-top:8px}
+@keyframes glowTitle{0%{filter:drop-shadow(0 6px 8px rgba(250,204,21,0.05)) hue-rotate(0deg)}50%{filter:drop-shadow(0 18px 30px rgba(250,204,21,0.22)) hue-rotate(40deg)}100%{filter:drop-shadow(0 6px 8px rgba(250,204,21,0.05)) hue-rotate(0deg)}}
+/* floating shield styles */
+.splash-shield{position:absolute;font-size:28px;opacity:0.85;transform:translateY(-20vh);pointer-events:none;animation:floatShield linear infinite}
+@keyframes floatShield{0%{transform:translateY(-10vh) rotate(0deg) scale(0.9)}50%{transform:translateY(60vh) rotate(180deg) scale(1.15)}100%{transform:translateY(140vh) rotate(360deg) scale(0.9)}}
+#enterSiteBtn{font-size:16px}
+</style>
+</style>
 </head>
 <style>
 /* Extra UI polish: modern buttons and small animations */
@@ -131,24 +146,13 @@ body.team-cursor{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/20
   <div id="sections-container"></div>
 </div>
 
-<!-- Login / Signup Overlay (mandatory on load) -->
+<!-- Fullscreen Splash Overlay (replaces sign in/up) -->
 <div id="authOverlay">
-  <div id="authBox" role="dialog" aria-modal="true">
-    <h2 id="authTitle">Welcome — Sign In / Sign Up</h2>
-    <div class="auth-switch">
-      <button id="toggleSignIn" class="active">Sign In</button>
-      <button id="toggleSignUp">Sign Up</button>
-    </div>
-    <div class="auth-row">
-      <input id="authUser" placeholder="Username" autocomplete="username">
-      <input id="authPass" placeholder="Password" type="password" autocomplete="current-password">
-    </div>
-    <div id="authFooter">
-      <div>
-        <button id="authSubmit">Sign In</button>
-        <button id="continueGuest" style="margin-left:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;padding:8px;border-radius:8px;">Continue as Guest</button>
-      </div>
-      <div id="authHelp" class="small-muted">No emails required. Accounts saved locally.</div>
+  <div id="splashOverlay">
+    <div id="splashCenter">
+      <h1 id="splashTitle">Scott 1</h1>
+      <p id="splashSubtitle">Welcome to the National Team</p>
+      <div style="margin-top:18px"><button id="enterSiteBtn" class="accent-btn">Enter Site</button></div>
     </div>
   </div>
 </div>
@@ -673,30 +677,25 @@ function renderAdmin(){
 
 /* ---------- AUTH UI wiring ---------- */
 function setupAuthUI(){
+  // Splash overlay initializer: create animated shield emojis and wire Enter button
   const overlay = document.getElementById('authOverlay');
-  const toggleSignIn = document.getElementById('toggleSignIn');
-  const toggleSignUp = document.getElementById('toggleSignUp');
-  const authTitle = document.getElementById('authTitle');
-  const authUser = document.getElementById('authUser');
-  const authPass = document.getElementById('authPass');
-  const authSubmit = document.getElementById('authSubmit');
-  const continueGuest = document.getElementById('continueGuest');
-  // inline status
-  let authStatus = document.getElementById('authStatus');
-  if(!authStatus){ authStatus = document.createElement('div'); authStatus.id='authStatus'; authStatus.style.cssText='color:#ffd27a;margin-top:8px;font-size:13px;min-height:18px'; document.getElementById('authBox').appendChild(authStatus); }
-
-  let mode = 'signin'; // or 'signup'
-  toggleSignIn.addEventListener('click', ()=>{ mode='signin'; toggleSignIn.style.opacity=1; toggleSignUp.style.opacity=0.7; authSubmit.textContent='Sign In'; authTitle.textContent='Welcome — Sign In'; authStatus.textContent=''; });
-  toggleSignUp.addEventListener('click', ()=>{ mode='signup'; toggleSignUp.style.opacity=1; toggleSignIn.style.opacity=0.7; authSubmit.textContent='Sign Up'; authTitle.textContent='Create your Account'; authStatus.textContent=''; });
-  authSubmit.addEventListener('click', async (ev)=>{
-    ev.preventDefault(); const u = authUser.value.trim(); const p = authPass.value;
-    if(!u || !p) { authStatus.textContent = 'Enter both username and password'; return; }
-    try{
-      if(mode==='signup'){ await registerUser(u,p); authStatus.textContent = 'Account created — please sign in'; mode='signin'; authSubmit.textContent='Sign In'; authTitle.textContent='Welcome — Sign In'; }
-      else { await loginUser(u,p); overlay.style.display='none'; authStatus.textContent=''; toast('Signed in as '+u); applyUserStateToUI(); }
-    }catch(err){ authStatus.textContent = String(err); }
-  });
-  continueGuest.addEventListener('click', ()=>{ overlay.style.display='none'; setCurrentUser(null); toast('Continuing as guest — some features will be disabled'); applyUserStateToUI(); });
+  const splashWrap = document.getElementById('splashOverlay');
+  const enter = document.getElementById('enterSiteBtn');
+  // create moving shields
+  const count = 28;
+  for(let i=0;i<count;i++){
+    const s = document.createElement('div'); s.className='splash-shield'; s.textContent='🛡️';
+    s.style.left = Math.random()*100+'%';
+    s.style.fontSize = (14+Math.random()*48)+'px';
+    s.style.opacity = 0.6+Math.random()*0.5;
+    s.style.animationDuration = (8+Math.random()*14)+'s';
+    s.style.animationDelay = (Math.random()*6)+'s';
+    splashWrap.appendChild(s);
+  }
+  // dismiss overlay on Enter
+  if(enter) enter.addEventListener('click', ()=>{ overlay.style.display='none'; setCurrentUser(null); toast('Welcome — continuing as guest'); });
+  // also allow clicking background to dismiss
+  overlay.addEventListener('click',(e)=>{ if(e.target===overlay) { overlay.style.display='none'; setCurrentUser(null); } });
 }
 
 /* ---------- apply user state to UI (coin counter, buttons enabled/disabled) ---------- */
