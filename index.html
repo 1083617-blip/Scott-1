@@ -605,9 +605,13 @@ function renderVIPPanel(){
   const games = [...document.querySelectorAll('.game button')].filter(b=>{ const t=b.textContent.toLowerCase(); return t.includes('escape') || t.includes('escaperoad') || b.dataset.vip==='true'; });
   if(!games.length) p.innerHTML += '<p style="opacity:0.6;margin-top:12px">No VIP games detected yet. Load the games first.</p>';
   games.forEach(b=>{
-    const row = document.createElement('div'); row.style.cssText='margin:10px 0;padding:10px;border-radius:10px;background:rgba(255,255,255,0.03);display:flex;align-items:center;gap:8px;';
-    const title = document.createElement('div'); title.textContent = b.textContent; title.style.cssText='flex:1;font-weight:700';
-    const play = document.createElement('button'); play.textContent='Play'; play.style.cssText='padding:8px 10px;border-radius:8px;border:none;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;font-weight:700;cursor:pointer;';
+    const row = document.createElement('div'); row.className='vip-row';
+    row.style.cssText='margin:10px 0;padding:10px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));display:flex;align-items:center;gap:12px;';
+    const thumb = document.createElement('div'); thumb.className='vip-thumb'; thumb.style.cssText='width:78px;height:52px;border-radius:8px;background:#0b1220;display:flex;align-items:center;justify-content:center;font-size:22px;color:#facc15;font-weight:900;flex-shrink:0;';
+    // auto-generate a simple emoji/icon based thumbnail from title
+    const icon = (b.textContent.match(/\b(escape|road|run|maze|quest|gate)\b/i)?.[0]||'🛡️'); thumb.textContent = (icon.length>2?icon:icon.replace(/escape/i,'🧩'));
+    const title = document.createElement('div'); title.textContent = b.textContent; title.style.cssText='flex:1;font-weight:800;font-size:14px;color:#fff';
+    const play = document.createElement('button'); play.textContent='Play'; play.className='accent-btn'; play.style.cssText='padding:8px 10px;border-radius:8px;border:none;color:#111;font-weight:900;';
     play.onclick = ()=>{
       if(!ensureUser()) { toast('Sign in to play VIP games'); return; }
       const u = users[currentUser];
@@ -615,7 +619,7 @@ function renderVIPPanel(){
       // trigger original button click
       b.click();
     };
-    row.appendChild(title); row.appendChild(play); p.appendChild(row);
+    row.appendChild(thumb); row.appendChild(title); row.appendChild(play); p.appendChild(row);
   });
   p.classList.add('open');
 }
