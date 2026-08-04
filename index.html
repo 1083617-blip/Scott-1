@@ -175,6 +175,13 @@ const CURRENT_USER_KEY = 'scott1CurrentUser_v1';
 let users = {}; // username => {passwordHash, coins, owned:[], plays, badgeClicks, activeEffects:[], isAdmin, isVIP, settings:{}}
 let currentUser = null; // username string or null (guest)
 
+// Clear persisted progress on every load so refresh resets state
+function resetProgressOnLoad(){
+  try{ localStorage.removeItem(USERS_KEY); localStorage.removeItem(CURRENT_USER_KEY); }catch(e){}
+  users = {};
+  currentUser = null;
+}
+
 function loadUsers(){
   try{
     const raw = localStorage.getItem(USERS_KEY);
@@ -259,6 +266,7 @@ function logoutUser(){
 }
 
 /* init user system and UI */
+resetProgressOnLoad();
 loadUsers();
 const savedCur = localStorage.getItem(CURRENT_USER_KEY) || '';
 if(savedCur && users[savedCur]) setCurrentUser(savedCur);
@@ -729,6 +737,7 @@ document.querySelectorAll(".toolbar button").forEach(btn=>{ if(btn.innerText.toL
 
 const splashTexts = ["SCOTT 1 4 LIFE!","INSANE!","LET'S GO!","GAME ON!","CRAZY!","PRO GAMER MOVE","UNBLOCKED!","100% REAL","SUS?!","NO VIRUS 😎","GREAT STUFF!","BRILLIANT!","NATIONAL TEAM!","Also try Minecraft!","Now with coins!","Better than ever!","System working!","EZ Clap!","Click the badges!","Buy the shop stuff!","Go Scott 1!","Now with ADMIN!","UncJohn who?","Team approved!"];
 const splashEl = document.getElementById("splash");
+const splashExtra = [];
 function newSplash(){ const pool = splashTexts.concat(splashExtra); if(splashEl) splashEl.innerText = pool[Math.floor(Math.random()*pool.length)]; }
 newSplash(); setInterval(newSplash,8000);
 
